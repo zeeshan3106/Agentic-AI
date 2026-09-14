@@ -9,10 +9,9 @@ if st.button("Submit"):
     API = 'http://localhost:8000/get'
     res = requests.post(API, input)
     data = res.json()
-    st.write(data['query'])
-    st.write(data['budget'])
-    st.write(data['response'])
-    # st.write(data['tone'])
-    # st.write(data['urgency'])
-    # st.write(data)
+    st.write(data['title'])
+    st.write(data['outline'])
+    st.write(data['blog'])
+    st.write(data['status'])
+    st.write(data['aproved'])
 
