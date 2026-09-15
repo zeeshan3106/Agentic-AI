@@ -3,8 +3,9 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from typing import TypedDict, Literal
 from pydantic import BaseModel
 from dotenv import load_dotenv
-
-
+from langgraph.checkpoint.memory import InMemorySaver
+from langgraph.checkpoint.sqlite import SqliteSaver
+import sqlite3
 load_dotenv()
 
 model = ChatGoogleGenerativeAI(model="gemini-3.1-flash-lite")
@@ -84,8 +85,7 @@ Blog:
         State['status']="approved"
     else:
         State['status']=result.score
-
-
+  
 
     return {'status': State['status']}
 
@@ -175,9 +175,15 @@ graph.add_conditional_edges('analyze_node',condition)
 graph.add_edge('optimization_node','analyze_node')
 graph.add_edge('approved_node',END)
 
-workflow = graph.compile()
+# checkpointer = InMemorySaver()
+connection = sqlite3.connect('abcd.sqlite', check_same_thread=False)
+checkpointer = SqliteSaver(connection)
+
+workflow = graph.compile(checkpointer=checkpointer)
 initial_state = {'title':'Pakistan', "iteration":0}
-a = workflow.invoke(initial_state)
-print(a)
+config={'configurable':{'thread_id':'2'}}
+a = workflow.invoke(initial_state, config=config)
+for i in workflow.get_state_history(config=config):
+    print(i)
 
 
