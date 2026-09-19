@@ -5,6 +5,9 @@ from pydantic import BaseModel
 from dotenv import load_dotenv
 from fastapi import FastAPI , Body
 from fastapi.responses import JSONResponse
+import os
+
+os.environ['LANGSMITH_PROJECT']='User enquiry Tracer'
 
 load_dotenv()
 model = ChatGoogleGenerativeAI(model = "gemini-3.1-flash-lite")
