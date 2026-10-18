@@ -1,0 +1,7 @@
+name:str,
+    contact:str,
+    email:str,
+    dept:str,
+    service:str,
+    specialist:str,
+    desc:str,
